@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+int integerRestoringDivision(int dividend, int divisor) {
+    int quotient = 0;
+    int remainder = 0;
+
+    if (divisor == 0) {
+        printf("Error: Division by zero\n");
+        return 0;
+    }
+
+    if (dividend == INT_MIN && divisor == -1) {
+        printf("Error: Integer overflow\n");
+        return 0;
+    }
+
+    int sign = 1;
+    if (dividend < 0) {
+        dividend = -dividend;
+        sign = -sign;
+    }
+    if (divisor < 0) {
+        divisor = -divisor;
+        sign = -sign;
+    }
+
+    for (int i = sizeof(int) * 8 - 1; i >= 0; i--) {
+        remainder <<= 1;
+        remainder |= (dividend >> i) & 1;
+        quotient <<= 1;
+        if (remainder >= divisor) {
+            remainder -= divisor;
+            quotient |= 1;
+        }
+    }
+
+    return sign * quotient;
+}
+
+int main() {
+    int dividend, divisor;
+    printf("Enter dividend: ");
+    scanf("%d", &dividend);
+    printf("Enter divisor: ");
+    scanf("%d", &divisor);
+
+    int result = integerRestoringDivision(dividend, divisor);
+    printf("Result of division: %d\n", result);
+
+    return 0;
+}
